@@ -1,32 +1,79 @@
-# Data Project Template
+# Gambaran Untuk Project Ini
+Kali ini saya membahas tentang proses lengkap (end-to-end) dalam membuat project machine learning.
 
-<a target="_blank" href="https://datalumina.com/">
-    <img src="https://img.shields.io/badge/Datalumina-Project%20Template-2856f7" alt="Datalumina Project" />
-</a>
+Saya membayangkan diterima kerja sebagai data scientist di perusahaan properti (real estate). Dan saya dikasih tugas untuk bikin sistem berbasis machine learning.
 
-## Cookiecutter Data Science
-This project template is a simplified version of the [Cookiecutter Data Science](https://cookiecutter-data-science.drivendata.org) template, created to suit the needs of Datalumina and made available as a GitHub template.
+👉 Tujuan project ini bukan belajar bisnis properti, tapi untuk belajar mengetahui alur kerja ML dari awal sampai akhir.
 
-## Adjusting .gitignore
+🏠 Dataset yang Dipakai di kali Ini
+Dataset yang digunakan adalah: 👉 California Housing Prices dataset source= https://github.com/ageron/data
 
-Ensure you adjust the `.gitignore` file according to your project needs. For example, since this is a template, the `/data/` folder is commented out and data will not be exlucded from source control:
+📌 Isinya: Data sensus tahun 1990 di California Digunakan untuk prediksi harga rumah
+📌 Catatan penting:Data ini cukup lama Tapi tetap dipakai karena: Mudah dipahami Cocok untuk belajar
+📌 Penyesuaian: Ditambah 1 fitur kategori Beberapa fitur dihapus (biar lebih simpel untuk pembelajaran) isinya seperti:
+Jumlah penduduk
+Pendapatan rata-rata
+Harga rumah rata-rata
+dll
 
-```plaintext
-# exclude data from source control by default
-# /data/
-```
+👉 Unit datanya disebut block group
+➡️ Supaya gampang, disebut district (daerah kecil)
+📌 Satu district kira-kira berisi: 600 – 3.000 orang
 
-Typically, you want to exclude this folder if it contains either sensitive data that you do not want to add to version control or large files.
+🎯 Tujuan Model
+Model saya harus bisa: Memprediksi harga rumah di suatu district berdasarkan data lainnya
 
-## Duplicating the .env File
-To set up your environment variables, you need to duplicate the `.env.example` file and rename it to `.env`. You can do this manually or using the following terminal command:
+📌 Contoh:
+Input: pendapatan, populasi, dll
+Output: harga rumah
 
-```bash
-cp .env.example .env # Linux, macOS, Git Bash, WSL
-copy .env.example .env # Windows Command Prompt
-```
+💼 Jawaban dari Bos
+Model kamu akan dipakai oleh sistem lain untuk: 👉 Menentukan apakah suatu daerah layak untuk investasi atau tidak
 
-This command creates a copy of `.env.example` and names it `.env`, allowing you to configure your environment variables specific to your setup.
+💰 Artinya:
+Kalau prediksi saya salah → bisa rugi besar
+Kalau benar → perusahaan untung
+
+Yang di Lakukan Perusahaan Saat Ini (Manual) 
+Sekarang mereka pakai cara lama:
+👨‍💼 Tim ahli: Kumpulin data, Estimasi harga pakai aturan rumit
+❌ Masalah: Lama, Mahal dan Tidak akurat (bisa meleset > 30%)
+👉 Makanya mereka butuh machine learning
+
+Menentukan Jenis Machine Learning
+Sekarang saya klasifikasikan masalahnya.
+
+✅ Apakah Supervised atau Tidak? 👉 Supervised Learning
+Kenapa? Karena:
+Ada input (data district)
+Ada label (harga rumah yang sudah diketahui)
+
+✅ Classification atau Regression? 👉 Regression 
+Karena: Output berupa angka (harga rumah) Bukan kategori
+
+✅ Multiple Regression
+Karena: Inputnya banyak:
+populasi
+income
+dll
+
+✅ Univariate Regression 
+Karena: Output cuma 1:
+harga rumah
+
+| Jenis             | Jawaban |
+| ----------------- | ------- |
+| Supervised        | ✅       |
+| Regression        | ✅       |
+| Multiple features | ✅       |
+| Single output     | ✅       |
+
+Batch Learning vs Online Learning
+👉 Batch Learning 
+Kenapa? Data tidak berubah terus-menerus, Tidak real-time, Data cukup kecil (muat di memory)
+
+
+to be continue
 
 
 ## Project Organization
