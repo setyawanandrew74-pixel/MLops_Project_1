@@ -131,6 +131,26 @@ Dengan melihat head(), info(), describe(), dan histogram, saya sekarang lebih me
 3. Beberapa atribut dibatasi (capped) – perlu perhatian khusus pada target
 4. Skala berbeda dan distribusi menceng – perlu transformasi nanti
 
+## Mmmbuat set data uji dan latihan
+Sebelum menganalisis data lebih jauh, saya  membuat:
+80% data → latih
+20% data → uji
+Para ahli dari pengloah dataset ini mengatakan:
+variabel: median_income
+sangat penting untuk memprediksi harga rumah.
+
+Maka saya membuat data uji dan latih harus memiliki distribusi income yang mirip dataset asli(sesuai dengan ditribusi di dataset).
+begini lah grafik distribusinya : 
+<img width="580" height="432" alt="Distirubusi Data income" src="https://github.com/user-attachments/assets/d91a89c7-0241-4acd-bb6a-b10fbc03684f" />
+Sumbu X: kategori income (1–5)
+Sumbu Y: jumlah district
+Isi grafik menunjukkan: mayoritas income berada di kategori tengah income sangat tinggi jumlahnya lebih sedikit
+Dan ini presentase proporsi data latih dan data uji yang sudah proses:
+<img width="400" height="143" alt="Proporsi_train_test_set" src="https://github.com/user-attachments/assets/5166765b-18d5-43f8-91b9-98a8be4f6009" />
+
+
+
+
 ## Project Organization
 
 ```
