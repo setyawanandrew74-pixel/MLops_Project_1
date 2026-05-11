@@ -131,7 +131,7 @@ Dengan melihat head(), info(), describe(), dan histogram, saya sekarang lebih me
 3. Beberapa atribut dibatasi (capped) – perlu perhatian khusus pada target
 4. Skala berbeda dan distribusi menceng – perlu transformasi nanti
 
-## Mmmbuat set data uji dan latihan
+## Mmmbuat set data uji dan latih
 Sebelum menganalisis data lebih jauh, saya  membuat:
 80% data → latih
 20% data → uji
@@ -148,9 +148,67 @@ Isi grafik menunjukkan: mayoritas income berada di kategori tengah income sangat
 Dan ini presentase proporsi data latih dan data uji yang sudah proses:
 <img width="400" height="143" alt="Proporsi_train_test_set" src="https://github.com/user-attachments/assets/5166765b-18d5-43f8-91b9-98a8be4f6009" />
 
+# EDA(Eksplorasi Data Analysis)
+Di bagian ini saya mulai melakukan: visualisasi data geografis
+karena dataset memiliki informasi lokasi:
+longitude (garis bujur)
+latitude (garis lintang)
+Tujuannya: melihat pola persebaran rumah langsung dari gambar/map.
+<img width="834" height="607" alt="Eksplorasi geografis data housing" src="https://github.com/user-attachments/assets/f81ecdc4-5f43-4fbc-b63e-2b6ca956df5d" />
+Setiap titik menunjukkan:
+| Visual           | Makna            |
+| ---------------- | ---------------- |
+| Posisi titik     | lokasi geografis |
+| Ukuran lingkaran | jumlah populasi  |
+| Warna            | harga rumah      |
+merah = rumah mahal
+biru = rumah murah
+lingkaran besar = populasi besar
+
+gambar tersebut menunjukkan: titik-titik lokasi district di California.
+Karena koordinat geografis dipakai, bentuknya terlihat seperti peta California
+sekarang terlihat:
+Bay Area
+Los Angeles
+San Diego
+Central Valley
+sebagai area dengan kepadatan tinggi.
+
+**Insight yang Didapat**
+harga rumah sangat dipengaruhi lokasi.
+
+Contohnya:
+-dekat laut → lebih mahal
+-kota besar → lebih mahal
+-daerah padat → sering lebih mahal
+Sekarang saya tahu: lokasi adalah fitur penting.
+
+Artinya model machine learning nanti kemungkinan besar akan belajar bahwa:
+-latitude,
+-longitude,
+punya pengaruh besar terhadap harga rumah.
+
+-ocean proximity
+fitur “dekat laut(ocean proximity)” kemungkinan penting.
+Tetapi:
+-tidak selalu benar,
+-ada area pantai yang tidak mahal.
+
+Jadi hubungan fitur dengan harga:
+-tidak selalu sesederhana “dekat laut = mahal”.
 
 
+Dan juga sepertinya algoritma clustering bisa dipakai untuk:
+-menemukan area-area penting,
+-mengelompokkan wilayah mirip.
 
+**Di tahap ini saya belajar bahwa:
+**
+visualisasi membantu menemukan pola penting pada data, Dan dari grafik saya menemukan:
+-lokasi memengaruhi harga rumah,
+-kepadatan populasi penting,
+-daerah tertentu membentuk cluster,
+-fitur geografis kemungkinan sangat berguna untuk model ML
 ## Project Organization
 
 ```
