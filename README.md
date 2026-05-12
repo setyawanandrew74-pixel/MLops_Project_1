@@ -202,13 +202,63 @@ Dan juga sepertinya algoritma clustering bisa dipakai untuk:
 -menemukan area-area penting,
 -mengelompokkan wilayah mirip.
 
-**Di tahap ini saya belajar bahwa:
-**
+Di tahap ini saya belajar bahwa:
 visualisasi membantu menemukan pola penting pada data, Dan dari grafik saya menemukan:
 -lokasi memengaruhi harga rumah,
 -kepadatan populasi penting,
 -daerah tertentu membentuk cluster,
 -fitur geografis kemungkinan sangat berguna untuk model ML
+
+Bagian ini saya sedang membahas tentang hubungan antar fitur (correlation) dalam dataset housing 🏠📊
+berikut laporan tabel fitur-fitur terhadap fitur median_house_value
+<img width="326" height="310" alt="fitur median income" src="https://github.com/user-attachments/assets/2cecdaee-0a59-47e2-bc19-2ba997e733fe" />
+
+Namun, Karena angka korelasi kadang kurang representatif, kita juga perlu visualisasi.
+berikut visualisasi korelasi beberapa fitur yang sudah di buat:
+<img width="1021" height="707" alt="scatter matrix beberapa fitur data housing" src="https://github.com/user-attachments/assets/43caa310-f261-4050-af81-5702461684b5" />
+
+Dari hasil sementara ini fitur paling menjanjikan adalah median_income
+Maka saya buat scatter plot khusus:
+<img width="598" height="433" alt="scatter plot median income dan median house value" src="https://github.com/user-attachments/assets/c648272f-1d83-4798-be58-831fb17fb234" />
+
+ini menunjukkan:
+a) Ada tren naik
+-Semakin tinggi income,
+-harga rumah cenderung naik.
+Artinya korelasi positif kuat.
+
+b) Tapi datanya noisy
+“Noisy” artinya:
+-tidak rapi
+-titiknya menyebar
+-ada variasi acak
+Karena dunia nyata memang tidak sempurna.
+Contoh:
+-dua daerah income sama tapi harga rumah berbeda karena faktor lain.
+
+Price Cap yang Terlihat
+Ada garis horizontal di:
+-$500,000
+Artinya:
+-banyak data berhenti di angka itu.
+-kemungkinan dataset dibatasi maksimal 500k.
+
+Ini bisa jadi Masalah
+Model machine learning bisa belajar:
+-“Oh, harga maksimal selalu 500k.”
+Padahal di dunia nyata bisa lebih mahal, Akibatnya model jadi bias.
+
+Saya juga melihat garis di sekitar:
+-450k
+-350k
+-280k
+
+Ini mencurigakan karena:
+-terlihat terlalu rapi
+-seperti hasil pembulatan atau batas buatan dataset.
+Biasanya disebut: data quirks / keanehan data.
+
+
 ## Project Organization
 
 ```
