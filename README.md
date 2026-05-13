@@ -1,4 +1,4 @@
-# Gambaran Untuk Project Ini
+**# Gambaran Untuk Project Ini**
 Kali ini saya membahas tentang proses lengkap (end-to-end) dalam membuat project machine learning.
 
 Saya membayangkan diterima kerja sebagai data scientist di perusahaan properti (real estate). Dan saya dikasih tugas untuk bikin sistem berbasis machine learning.
@@ -72,7 +72,7 @@ Batch Learning vs Online Learning
 👉 Batch Learning 
 Kenapa? Data tidak berubah terus-menerus, Tidak real-time, Data cukup kecil (muat di memory)
 
-# Sekilas Tentang Struktur Data
+**# Sekilas Tentang Struktur Data**
 <img width="5118" height="1207" alt="struktur_data_housing" src="https://github.com/user-attachments/assets/66224a3c-21dd-442a-9caa-391420eb4b46" />
 Di awal, Saya pakai metode head(). Hasilnya Gambar sebuah tabel yang menampilkan 5 baris pertama dari dataset.
 - Setiap baris mewakili satu distrik (daerah).
@@ -88,7 +88,7 @@ Contoh: total_bedrooms hanya punya 20.433 nilai non-null → berarti 207 distrik
 Semua atribut numerik kecuali ocean_proximity yang tipe-nya object → ini teks (kategorikal).
 <img width="343" height="203" alt="Ocean_Struktur_variabel" src="https://github.com/user-attachments/assets/afed08e2-0bc7-4e2a-bdd2-887837cc23c0" />
 
-# Ringkasan Statistik Tentang Data
+**# Ringkasan Statistik Tentang Data**
 Saya menggunakan metode describe() yang menghasilkan sebuah tabel statistik untuk setiap atribut numerik.
 <img width="1455" height="1446" alt="statistik_housing" src="https://github.com/user-attachments/assets/7c6b29cd-52d5-46d1-97cf-5657771edb2c" />
 
@@ -124,14 +124,14 @@ Contoh: Pendapatan(median income) kebanyakan orang di kisaran menengah ke bawah,
 
 Dampak: Beberapa algoritma ML sulit mendeteksi pola. Nanti kita akan mengubah bentuk distribusi menjadi lebih simetris (seperti lonceng).
 
-# Ringkasan Akhir Untuk Struktur Data
+**# Ringkasan Akhir Untuk Struktur Data**
 Dengan melihat head(), info(), describe(), dan histogram, saya sekarang lebih memahami data yang akan saya olah. saya tahu:
 1. Ada data kosong (207 total_bedrooms hilang)
 2. Ada atribut teks (ocean_proximity)
 3. Beberapa atribut dibatasi (capped) – perlu perhatian khusus pada target
 4. Skala berbeda dan distribusi menceng – perlu transformasi nanti
 
-## Mmmbuat set data uji dan latih
+**## Mmmbuat set data uji dan latih**
 Sebelum menganalisis data lebih jauh, saya  membuat:
 80% data → latih
 20% data → uji
@@ -148,7 +148,7 @@ Isi grafik menunjukkan: mayoritas income berada di kategori tengah income sangat
 Dan ini presentase proporsi data latih dan data uji yang sudah proses:
 <img width="400" height="143" alt="Proporsi_train_test_set" src="https://github.com/user-attachments/assets/5166765b-18d5-43f8-91b9-98a8be4f6009" />
 
-# EDA(Eksplorasi Data Analysis)
+**# EDA(Eksplorasi Data Analysis)**
 Di bagian ini saya mulai melakukan: visualisasi data geografis
 karena dataset memiliki informasi lokasi:
 longitude (garis bujur)
@@ -243,8 +243,7 @@ Artinya:
 -banyak data berhenti di angka itu.
 -kemungkinan dataset dibatasi maksimal 500k.
 
-Ini bisa jadi Masalah
-Model machine learning bisa belajar:
+Ini bisa jadi Masalah karnea Model machine learning bisa belajar:
 -“Oh, harga maksimal selalu 500k.”
 Padahal di dunia nyata bisa lebih mahal, Akibatnya model jadi bias.
 
@@ -252,13 +251,62 @@ Saya juga melihat garis di sekitar:
 -450k
 -350k
 -280k
-
 Ini mencurigakan karena:
 -terlihat terlalu rapi
 -seperti hasil pembulatan atau batas buatan dataset.
 Biasanya disebut: data quirks / keanehan data.
 
+langkah berikutnya yang saya lakukan adalah mencoba menggabungkan beberapa fitur (attribute combinations) untuk membuat fitur baru yang mungkin lebih berguna bagi model machine learning atau biasa disebut feature engineering. Berikut Laporan korelasi terbaru yang sudah di buat: <img width="353" height="399" alt="Korelasi Fitur Baru" src="https://github.com/user-attachments/assets/8e90a646-cec3-4f3a-8edb-1a70014231d8" />
 
+
+1. Fitur pertama yang saya buat adalah rooms_per_house(rata-rata kamar per rumah), maknanya yaitu :
+   Kalau hasilnya besar:
+-berarti rata-rata rumah punya banyak kamar,
+-kemungkinan rumahnya besar,
+-biasanya harga rumah lebih mahal.
+2. Fitur selanjutnya bedrooms_ratio(rasio kamar tidur per rumah)
+   Ini menghitung:
+   -berapa persen kamar yang merupakan bedroom(kamar tidur).
+
+Misalnya:
+total room = 10
+bedroom = 8
+Maka:    10/8=0.8
+Artinya:
+80% ruangan adalah kamar tidur.
+
+Menurut Saya Ini Penting karena rumah mahal biasanya:
+-punya ruang lebih beragam,
+-ruang tamu besar,
+-dapur besar,
+-ruang kerja,
+-ruang santai, dll.
+
+Sedangkan rumah kecil sering: sebagian besar ruangnya hanya kamar tidur.
+
+Jadi:
+-semakin kecil bedroom ratio,
+-biasanya rumah lebih mewah.
+- dan menurut laporan juga fitur ini punya korelasi negatif yang kuat terhadap harga rumah.
+Artinya:
+bedroom ratio naik → harga rumah cenderung turun
+bedroom ratio turun → harga rumah cenderung naik
+
+3. Fitur selanjutnya yang saya buat adalah people_per_house(rata-rata orang per rumah)
+   Kalau nilainya terlalu tinggi:
+-area mungkin padat,
+-kualitas lingkungan mungkin menurun,
+-rumah mungkin lebih kecil.
+
+Ini bisa memengaruhi harga rumah.
+
+Hasil dari penambahan fitur ini saya menemukan bahwa:
+-bedrooms_ratio(rasio kamar tidur)
+
+lebih berguna dibanding fitur:
+-total_rooms
+-total_bedrooms
+Karena rasio memberi konteks.
 ## Project Organization
 
 ```
