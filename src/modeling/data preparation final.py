@@ -36,8 +36,8 @@ for set_ in (train_set, test_set):
     set_.drop("income_cat", axis=1, inplace=True)
 
 housing = train_set.copy()
-housing_train = train_set.drop("median_house_value", axis=1)
-housing_labels = train_set["median_house_value"].copy()
+housing_trainset_x = train_set.drop("median_house_value", axis=1)
+housing_labels_trainset_y = train_set["median_house_value"].copy()
 
 
 class ClusterSimilarity(BaseEstimator, TransformerMixin):
@@ -114,7 +114,7 @@ preprocessing = ColumnTransformer(
     ],
     remainder=default_pipeline,
 )
-housing_prepared = preprocessing.fit_transform(housing_train)
+housing_prepared = preprocessing.fit_transform(housing_trainset_x)
 
 
 print(housing_prepared.shape)
