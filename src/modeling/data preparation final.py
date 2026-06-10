@@ -118,3 +118,4 @@ housing_prepared = preprocessing.fit_transform(housing_trainset_x)
 
 
 print(housing_prepared.shape)
+print(preprocessing.get_feature_names_out())
