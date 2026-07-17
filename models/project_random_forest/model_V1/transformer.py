@@ -16,33 +16,6 @@ from sklearn.model_selection import RandomizedSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestRegressor
 
-housing = pd.read_csv("D:\\USER\\git_github\\MLOps_project_1\\data\\raw\\housing.csv")
-
-# buat kategori berdasarkan median_income agar tes set sesuai dengan proporsi ditribusi median_income
-housing["income_cat"] = pd.cut(
-    housing["median_income"],
-    bins=[0.0, 1.5, 3.0, 4.5, 6.0, np.inf],
-    labels=[1, 2, 3, 4, 5],
-)
-
-# buat data train dan test dengan stratified sampling berdasarkan income_cat
-train_set, test_set = train_test_split(
-    housing, test_size=0.2, stratify=housing["income_cat"], random_state=42
-)
-
-# cek hasil proporsi income_cat di test set dan train set
-test_set["income_cat"].value_counts() / len(test_set)
-train_set["income_cat"].value_counts() / len(train_set)
-
-
-# hapus kolom income_cat karena sudah tidak diperlukan lagi
-for set_ in (train_set, test_set):
-    set_.drop("income_cat", axis=1, inplace=True)
-
-housing = train_set.copy()
-housing_train_x = train_set.drop("median_house_value", axis=1)
-housing_labels_train_y = train_set["median_house_value"].copy()
-
 
 # buat class untuk data preparation untuk model clustering
 class ClusterSimilarity(BaseEstimator, TransformerMixin):
@@ -119,35 +92,4 @@ preprocessing = ColumnTransformer(
         ("cat", cat_pipeline, make_column_selector(dtype_include=object)),
     ],
     remainder=default_pipeline,
-)
-
-# buat randomsearch untuk hyperparameter tuning random forest regressor
-full_pipeline = Pipeline(
-    [
-        ("preprocessing", preprocessing),
-        ("random_forest", RandomForestRegressor(random_state=42)),
-    ]
-)
-
-param_distribs = {
-    "preprocessing__geo__n_clusters": randint(low=3, high=50),
-    "random_forest__max_features": randint(low=2, high=25),
-}
-
-rnd_search_forest_reg = RandomizedSearchCV(
-    full_pipeline,
-    param_distributions=param_distribs,
-    n_iter=10,
-    cv=3,
-    scoring="neg_root_mean_squared_error",
-    random_state=42,
-    refit=True,
-)
-rnd_search_forest_reg.fit(housing_train_x, housing_labels_train_y)
-
-# save the best model
-final_model = rnd_search_forest_reg.best_estimator_
-joblib.dump(
-    final_model,
-    "my_california_housing_model_rnd.pkl",
 )
