@@ -90,6 +90,8 @@ target/
 .venv/
 
 # Exclude trained models
+/models/project_random_forest/model_V1/My_california_housing_model_rnd.pkl
+
 
 
 # exclude data from source control by default
