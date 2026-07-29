@@ -13,6 +13,9 @@ MODEL_OUTPUT_PATH = (
     r"D:\USER\git_github\MLOps_project_1\models\project_random_forest"
     r"\model_V1\my_california_housing_model_rnd.pkl"
 )
+# Test set disimpan sebagai CSV supaya bisa dipakai ulang oleh predict.py
+# maupun evaluate.py, tanpa perlu split ulang dari housing.csv setiap kali.
+TEST_SET_OUTPUT_PATH = r"D:\USER\git_github\MLOps_project_1\data\processed\test_set.csv"
 
 # ======================
 # 2. TRAIN-TEST SPLIT
