@@ -1,41 +1,98 @@
 """
 config.py
-Semua konfigurasi (path, parameter, hyperparameter) untuk project
-housing price prediction. Tujuannya: train.py cukup import dari sini,
-jadi kalau mau ganti setting, cukup edit file ini saja.
+Konfigurasi terpusat untuk project Housing Price Prediction.
+
+Semua pengaturan project berada di sini:
+- Path file & folder
+- Pilihan algoritma
+- Versi model
+- Hyperparameter
+- Parameter training
+
+Dengan desain ini train.py dan predict.py tidak perlu diubah
+ketika ingin mengganti algoritma ataupun versi model.
 """
 
-# ======================
-# 1. PATH
-# ======================
-DATA_PATH = r"D:\USER\git_github\MLOps_project_1\data\raw\housing.csv"
-MODEL_OUTPUT_PATH = (
-    r"D:\USER\git_github\MLOps_project_1\models\project_random_forest"
-    r"\model_V1\my_california_housing_model_rnd.pkl"
-)
-# Test set disimpan sebagai CSV supaya bisa dipakai ulang oleh predict.py
-# maupun evaluate.py, tanpa perlu split ulang dari housing.csv setiap kali.
-TEST_SET_OUTPUT_PATH = r"D:\USER\git_github\MLOps_project_1\data\processed\test_set.csv"
+from pathlib import Path
 
-# ======================
-# 2. TRAIN-TEST SPLIT
-# ======================
+from scipy.stats import randint
+
+from sklearn.linear_model import LinearRegression
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+
+
+# ==========================================================
+# 1. PILIH MODEL YANG AKTIF
+# ==========================================================
+
+ACTIVE_MODEL = "random_forest"
+MODEL_VERSION = "model_V1"
+
+
+# ==========================================================
+# 2. BASE DIRECTORY
+# ==========================================================
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
+
+DATA_DIR = BASE_DIR / "data"
+RAW_DATA_DIR = DATA_DIR / "raw"
+PROCESSED_DIR = DATA_DIR / "processed"
+
+MODELS_DIR = BASE_DIR / "models"
+
+
+# ==========================================================
+# 3. FILE PATH
+# ==========================================================
+
+DATA_PATH = RAW_DATA_DIR / "housing.csv"
+
+TEST_SET_PATH = PROCESSED_DIR / "test_set.csv"
+
+MODEL_DIR = MODELS_DIR / f"project_{ACTIVE_MODEL}" / MODEL_VERSION
+
+MODEL_PATH = MODEL_DIR / "model.pkl"
+
+PREDICTION_PATH = MODEL_DIR / "predictions_test.csv"
+# ==========================================================
+# 4. TARGET
+# ==========================================================
+
+TARGET_COLUMN = "median_house_value"
+
+
+# ==========================================================
+# 5. TRAIN TEST SPLIT
+# ==========================================================
+
 TEST_SIZE = 0.2
 RANDOM_STATE = 42
 
-# Untuk stratified split berdasarkan median_income
 INCOME_CAT_BINS = [0.0, 1.5, 3.0, 4.5, 6.0, float("inf")]
 INCOME_CAT_LABELS = [1, 2, 3, 4, 5]
 
-# ======================
-# 3. KOLOM-KOLOM FITUR
-# ======================
-# Kolom untuk masing-masing ratio pipeline
-BEDROOMS_PER_ROOM_COLS = ["total_bedrooms", "total_rooms"]
-ROOMS_PER_HOUSEHOLD_COLS = ["total_rooms", "households"]
-PEOPLE_PER_HOUSEHOLD_COLS = ["population", "households"]
 
-# Kolom untuk log pipeline
+# ==========================================================
+# 6. PREPROCESSING
+# ==========================================================
+
+BEDROOMS_PER_ROOM_COLS = [
+    "total_bedrooms",
+    "total_rooms",
+]
+
+ROOMS_PER_HOUSEHOLD_COLS = [
+    "total_rooms",
+    "households",
+]
+
+PEOPLE_PER_HOUSEHOLD_COLS = [
+    "population",
+    "households",
+]
+
 LOG_COLS = [
     "total_bedrooms",
     "total_rooms",
@@ -44,33 +101,55 @@ LOG_COLS = [
     "median_income",
 ]
 
-# Kolom untuk geo clustering (ClusterSimilarity)
-GEO_COLS = ["latitude", "longitude"]
+GEO_COLS = [
+    "latitude",
+    "longitude",
+]
 
-# Target column
-TARGET_COL = "median_house_value"
 
-# ======================
-# 4. HYPERPARAMETER CLUSTERSIMILARITY (default sebelum tuning)
-# ======================
+# ==========================================================
+# 7. CLUSTER SIMILARITY
+# ==========================================================
+
 CLUSTER_N_CLUSTERS_DEFAULT = 10
 CLUSTER_GAMMA = 1.0
 
-# ======================
-# 5. HYPERPARAMETER RANDOM FOREST (default)
-# ======================
-RF_RANDOM_STATE = 42
 
-# ======================
-# 6. RANDOMIZED SEARCH CV
-# ======================
-from scipy.stats import randint
+# ==========================================================
+# 8. MODEL CONFIGURATION
+# ==========================================================
 
-PARAM_DISTRIBS = {
-    "preprocessing__geo__n_clusters": randint(low=3, high=50),
-    "random_forest__max_features": randint(low=2, high=25),
+MODEL_CONFIG = {
+    "linear_regression": {
+        "model": LinearRegression(),
+        "params": {
+            "preprocessing__geo__n_clusters": randint(3, 50),
+        },
+    },
+    "decision_tree": {
+        "model": DecisionTreeRegressor(random_state=RANDOM_STATE),
+        "params": {
+            "preprocessing__geo__n_clusters": randint(3, 50),
+            "model__max_depth": randint(2, 30),
+            "model__min_samples_split": randint(2, 20),
+            "model__min_samples_leaf": randint(1, 20),
+        },
+    },
+    "random_forest": {
+        "model": RandomForestRegressor(random_state=RANDOM_STATE),
+        "params": {
+            "preprocessing__geo__n_clusters": randint(3, 50),
+            "model__max_features": randint(2, 25),
+        },
+    },
 }
+
+
+# ==========================================================
+# 9. TRAINING CONFIG
+# ==========================================================
 
 CV_N_ITER = 10
 CV_FOLDS = 3
+
 CV_SCORING = "neg_root_mean_squared_error"
