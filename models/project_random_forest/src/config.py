@@ -26,7 +26,7 @@ from sklearn.ensemble import RandomForestRegressor
 # 1. PILIH MODEL YANG AKTIF
 # ==========================================================
 
-ACTIVE_MODEL = "random_forest"
+ACTIVE_MODEL = "decision_tree"
 MODEL_VERSION = "model_V1"
 
 
