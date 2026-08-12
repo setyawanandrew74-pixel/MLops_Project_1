@@ -26,7 +26,7 @@ from sklearn.ensemble import RandomForestRegressor
 # 1. PILIH MODEL YANG AKTIF
 # ==========================================================
 
-ACTIVE_MODEL = "linear_regression"  # linear_regression | decision_tree | random_forest
+ACTIVE_MODEL = "random_forest"  # linear_regression | decision_tree | random_forest
 MODEL_VERSION = "model_V1"
 
 
